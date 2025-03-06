@@ -1,39 +1,35 @@
-let tarefas: string[] = [];
+class Tarefa(descricao: string, concluida: boolean = false) {
+    constructor(public descricao: string, public concluida: boolean ) {
 
-interface ListaDeTarefas {
-    adicionarTarefa(tarefa: string): void;
-    listarTarefas(): void;
-    removerTarefa(index: number): void;
-}
+        marcarConcluida(): void {
+            this.concluida = true;
+        }
 
-class ListaDeTarefasImpl implements ListaDeTarefas {
-    private tarefas: string[] = [];
-
-    adicionarTarefa(tarefa: string): void {
-        this.tarefas.push(tarefa);
-        console.log(`Tarefa "${tarefa}" adicionada.`);
-    }
-
-    listarTarefas(): void {
-        console.log("Lista de Tarefas:");
-        this.tarefas.forEach((tarefa, index) => {
-            console.log(`${index + 1}. ${tarefa}`);
-        });
-    }
-
-    removerTarefa(index: number): void {
-        if (index >= 0 && index < this.tarefas.length) {
-            const tarefaRemovida = this.tarefas.splice(index, 1)[0];
-            console.log(`Tarefa "${tarefaRemovida}" removida.`);
-        } else {
-            console.log("Índice inválido.");
+        detalhes(): string {
+            return `${this.concluida ? "[X]" : "[ ]"} ${this.descricao}`;
         }
     }
 }
 
-const listaDeTarefas = new ListaDeTarefasImpl();
+class GerenciadorTarefas() {
+    private tarefas: Tarefa[] = [];
 
-listaDeTarefas.adicionarTarefa("Estudar TypeScript");
-listaDeTarefas.adicionarTarefa("Estudar Angular");
-listaDeTarefas.listarTarefas();
-listaDeTarefas.removerTarefa(1);
+    adicionarTarefa(descricao: string): void {
+        const tarefa = new Tarefa(descricao);
+        this.tarefas.push(tarefa);
+    }
+
+    listarTarefas(): void {
+        this.tarefas.forEach(tarefa => {
+            console.log(tarefa.detalhes());
+        });
+    }
+
+    marcarConcluida(indice: number): void {
+        if (indice >= 0 && indice < this.tarefas.length) {
+            this.tarefas[indice].marcarConcluida();
+        }
+    }
+}
+
+const
